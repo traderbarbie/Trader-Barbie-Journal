@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TraderBarbie">
+<meta name="theme-color" content="#FF1493">
+<link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0668/9207/1010/files/Ran_off.png?v=1779749811">
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0668/9207/1010/files/Ran_off.png?v=1779749811">
+<title>Trader Barbie — Trading Journal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --hot-pink: #FF1493;
+  --barbie-pink: #FF69B4;
+  --light-pink: #FFB6C1;
+  --pale-pink: #FFF0F5;
+  --gold: #FFD700;
+  --dark: #0A0A0A;
+  --dark2: #111111;
+  --dark3: #1A1A1A;
+  --card: rgba(255,20,147,0.07);
+  --card2: rgba(255,20,147,0.12);
+  --border: rgba(255,20,147,0.2);
+  --border2: rgba(255,20,147,0.4);
+  --text: rgba(255,255,255,0.85);
+  --text-dim: rgba(255,255,255,0.5);
+  --green: #00C853;
+  --red: #FF3B3B;
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--dark);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: calc(80px + var(--safe-bottom));
+}
+
+/* ── BACKGROUND ── */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-glow-1 {
+  width: 400px; height: 400px;
+  top: -150px; left: -150px;
+  background: radial-gradient(circle, rgba(255,20,147,0.08) 0%, transparent 70%);
+}
+.bg-glow-2 {
+  width: 300px; height: 300px;
+  bottom: 100px; right: -100px;
+  background: radial-gradient(circle, rgba(255,105,180,0.06) 0%, transparent 70%);
+}
+
+/* ── SCREENS ── */
+.screen {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 80px);
+  padding: 0 0 20px;
+  animation: fadeIn 0.3s ease;
+}
+.screen.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HEADER ── */
+.app-header {
+  background: linear-gradient(180deg, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0.95) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 20px 16px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.app-header .brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--hot-pink);
+  letter-spacing: 1px;
+}
+
+.app-header .brand span { color: var(--gold); }
+
+.app-header .screen-title {
+  font-size: 11px;
+  color: var(--barbie-pink);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0; right: 0;
+  background: rgba(10,10,10,0.97);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 200;
+  padding-bottom: var(--safe-bottom);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  gap: 4px;
+}
+
+.nav-btn .nav-icon { font-size: 22px; transition: transform 0.2s; }
+.nav-btn.active { color: var(--hot-pink); }
+.nav-btn.active .nav-icon { transform: scale(1.15); }
+
+/* ── CONTENT WRAPPER ── */
+.content {
+  padding: 20px 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── HOME SCREEN ── */
+.home-greeting {
+  text-align: center;
+  padding: 24px 16px 20px;
+}
+
+.home-greeting h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.home-greeting h2 span { color: var(--hot-pink); }
+
+.home-greeting p {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.stat-box .s-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.stat-box .s-val.green { color: var(--green); }
+.stat-box .s-val.red { color: var(--red); }
+.stat-box .s-val.pink { color: var(--hot-pink); }
+.stat-box .s-val.gold { color: var(--gold); }
+
+.stat-box .s-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Quick action buttons */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.qa-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.qa-btn:active { transform: scale(0.97); }
+.qa-btn.primary { background: var(--hot-pink); border-color: var(--hot-pink); box-shadow: 0 6px 20px rgba(255,20,147,0.3); }
+.qa-btn.gold-btn { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.3); }
+
+.qa-btn .qa-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+.qa-btn .qa-label { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
+.qa-btn .qa-sub { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+.qa-btn.primary .qa-sub { color: rgba(255,255,255,0.8); }
+
+/* Recent trades */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--hot-pink);
+}
+
+.section-header a {
+  font-size: 11px;
+  color: var(--barbie-pink);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.trade-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.trade-card:active { transform: scale(0.99); border-color: var(--border2); }
+
+.trade-left { flex: 1; }
+
+.trade-symbol {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+
+.trade-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.trade-right { text-align: right; }
+
+.trade-pnl {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.trade-pnl.win { color: var(--green); }
+.trade-pnl.loss { color: var(--red); }
+.trade-pnl.be { color: var(--gold); }
+
+.trade-result {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-dim);
+}
+
+.empty-state .e-icon { font-size: 48px; margin-bottom: 12px; display: block; opacity: 0.5; }
+.empty-state p { font-size: 14px; line-height: 1.6; }
+
+/* ── LOG TRADE SCREEN ── */
+.mode-toggle {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.mode-btn.active {
+  background: var(--hot-pink);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255,20,147,0.3);
+}
+
+/* Form styles */
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-section-title {
+  font-size: 10px;
+  color: var(--barbie-pink);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-left: 2px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--hot-pink);
+  background: var(--card2);
+}
+
+.form-select option { background: #1A1A1A; color: #fff; }
+
+.form-textarea {
+  resize: none;
+  height: 90px;
+  line-height: 1.6;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Emotion selector */
+.emotion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.emotion-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 10px;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.emotion-btn .e-emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+.emotion-btn.selected { border-color: var(--hot-pink); background: var(--card2); color: var(--hot-pink); }
+
+/* Rule checkboxes */
+.rule-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rule-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.rule-check input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--hot-pink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.rule-check label {
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Rating stars */
+.star-rating {
+  display: flex;
+  gap: 8px;
+}
+
+.star-btn {
+  font-size: 28px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  opacity: 0.3;
+  transition: all 0.15s;
+  padding: 2px;
+}
+
+.star-btn.lit { opacity: 1; }
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  background: var(--hot-pink);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 20px rgba(255,20,147,0.35);
+  margin-top: 8px;
+}
+
+.submit-btn:active { transform: scale(0.98); box-shadow: none; }
+
+/* ── JOURNAL SCREEN ── */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar { display: none; }
+
+.filter-chip {
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.filter-chip.active {
+  background: var(--hot-pink);
+  border-color: var(--hot-pink);
+  color: #fff;
+}
+
+/* ── STATS SCREEN ── */
+.stats-big {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-big-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.stat-big-box .sb-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.stat-big-box .sb-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Win rate bar */
+.win-rate-bar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.win-rate-bar h4 {
+  font-size: 11px;
+  color: var(--barbie-pink);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.bar-track {
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  height: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--hot-pink), var(--barbie-pink));
+  transition: width 0.8s ease;
+}
+
+.bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* P&L by day */
+.pnl-day-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.pnl-day-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,20,147,0.08);
+}
+
+.pnl-day-item:last-child { border-bottom: none; }
+
+.pnl-day-name { font-size: 13px; color: var(--text); }
+.pnl-day-amount { font-size: 14px; font-weight: 600; }
+
+/* ── WEEKLY REVIEW SCREEN ── */
+.review-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.review-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--hot-pink);
+  margin-bottom: 14px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--hot-pink);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 1000;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(255,20,147,0.4);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Trade detail modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 500;
+  backdrop-filter: blur(8px);
+}
+
+.modal-overlay.open { display: flex; align-items: flex-end; }
+
+.modal-sheet {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px 20px calc(20px + var(--safe-bottom));
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-handle {
+  width: 40px; height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.modal-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.detail-item {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.detail-item .d-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.detail-item .d-val { font-size: 14px; color: #fff; font-weight: 500; }
+
+.detail-notes {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.detail-notes h4 { font-size: 10px; color: var(--barbie-pink); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+
+.delete-btn {
+  width: 100%;
+  background: rgba(255,59,59,0.1);
+  border: 1px solid rgba(255,59,59,0.3);
+  color: #FF3B3B;
+  border-radius: 12px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer-bar {
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ══════════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="app-header">
+    <div class="brand">Trader <span>Barbie</span> 💕</div>
+    <div class="screen-title">Trading Journal</div>
+  </div>
+
+  <div class="content">
+    <div class="home-greeting">
+      <h2>Hey, <span>Trader</span> 💕</h2>
+      <p id="home-date">Loading...</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row" id="home-stats">
+      <div class="stat-box">
+        <span class="s-val pink" id="stat-trades">0</span>
+        <span class="s-label">Trades</span>
+      </div>
+      <div class="stat-box">
+        <span class="s-val" id="stat-winrate">0%</span>
+        <span class="s-label">Win Rate</span>
+      </div>
+      <div class="stat-box">
+        <span class="s-val" id="stat-pnl">$0</span>
+        <span class="s-label">Total P&L</span>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="qa-btn primary" onclick="goTo('log')">
+        <span class="qa-icon">⚡</span>
+        <div class="qa-label">Log Trade</div>
+        <div class="qa-sub">Quick or detailed</div>
+      </div>
+      <div class="qa-btn gold-btn" onclick="goTo('review')">
+        <span class="qa-icon">📅</span>
+        <div class="qa-label">Weekly Review</div>
+        <div class="qa-sub">Reflect & improve</div>
+      </div>
+      <div class="qa-btn" onclick="goTo('journal')">
+        <span class="qa-icon">📓</span>
+        <div class="qa-label">All Trades</div>
+        <div class="qa-sub">View history</div>
+      </div>
+      <div class="qa-btn" onclick="goTo('stats')">
+        <span class="qa-icon">📊</span>
+        <div class="qa-label">My Stats</div>
+        <div class="qa-sub">Performance</div>
+      </div>
+    </div>
+
+    <!-- Recent Trades -->
+    <div class="section-header">
+      <h3>Recent Trades</h3>
+      <a onclick="goTo('journal')">See all →</a>
+    </div>
+    <div id="recent-trades-list">
+      <div class="empty-state">
+        <span class="e-icon">📈</span>
+        <p>No trades yet.<br>Log your first trade to get started! 💕</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LOG TRADE SCREEN
+══════════════════════════════════════ -->
+<div id="screen-log" class="screen">
+  <div class="app-header">
+    <div class="brand">Trader <span>Barbie</span> 💕</div>
+    <div class="screen-title">Log a Trade</div>
+  </div>
+
+  <div class="content">
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="mode-quick" onclick="setMode('quick')">⚡ Quick Entry</button>
+      <button class="mode-btn" id="mode-detail" onclick="setMode('detail')">📋 Full Detail</button>
+    </div>
+
+    <form id="trade-form" onsubmit="saveTrade(event)">
+
+      <!-- QUICK SECTION — always visible -->
+      <div class="form-section">
+        <div class="form-section-title">📋 Trade Info</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Symbol</label>
+            <input class="form-input" id="f-symbol" placeholder="SPX, AAPL..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Market</label>
+            <select class="form-select" id="f-market">
+              <option>Options</option>
+              <option>Futures</option>
+              <option>Stocks</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Direction</label>
+            <select class="form-select" id="f-direction">
+              <option>🟢 Call / Long</option>
+              <option>🔴 Put / Short</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contracts</label>
+            <input class="form-input" id="f-contracts" type="number" placeholder="1" min="1">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Entry $</label>
+            <input class="form-input" id="f-entry" type="number" step="0.01" placeholder="0.00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Exit $</label>
+            <input class="form-input" id="f-exit" type="number" step="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Result</label>
+            <select class="form-select" id="f-result">
+              <option>✅ Win</option>
+              <option>❌ Loss</option>
+              <option>➖ Breakeven</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">P&L ($)</label>
+            <input class="form-input" id="f-pnl" type="number" step="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAILED SECTION — shows in detail mode -->
+      <div id="detail-fields" style="display:none;">
+
+        <div class="form-section">
+          <div class="form-section-title">🎯 Setup Details</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Strike Price</label>
+              <input class="form-input" id="f-strike" placeholder="Options only">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expiration</label>
+              <input class="form-input" id="f-expiry" placeholder="0DTE / Weekly...">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Setup Type</label>
+            <select class="form-select" id="f-setup">
+              <option>Breakout</option>
+              <option>Pullback</option>
+              <option>VWAP Reclaim</option>
+              <option>Support & Resistance</option>
+              <option>FVG</option>
+              <option>Trend Follow</option>
+              <option>Reversal</option>
+              <option>News Play</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Market Condition</label>
+            <select class="form-select" id="f-condition">
+              <option>🟢 Trending Up</option>
+              <option>🔴 Trending Down</option>
+              <option>➡️ Choppy</option>
+              <option>⚡ High Volatility</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Why Did You Take This Trade?</label>
+            <textarea class="form-textarea" id="f-why" placeholder="What did you see? What was the setup..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">😤 Emotional State</div>
+          <div class="form-label" style="margin-bottom:10px;">How were you feeling BEFORE the trade?</div>
+          <div class="emotion-grid" id="emotion-grid">
+            <div class="emotion-btn" onclick="selectEmotion(this,'😌 Calm')">
+              <span class="e-emoji">😌</span>Calm
+            </div>
+            <div class="emotion-btn" onclick="selectEmotion(this,'🎯 Focused')">
+              <span class="e-emoji">🎯</span>Focused
+            </div>
+            <div class="emotion-btn" onclick="selectEmotion(this,'😎 Confident')">
+              <span class="e-emoji">😎</span>Confident
+            </div>
+            <div class="emotion-btn" onclick="selectEmotion(this,'😰 Anxious')">
+              <span class="e-emoji">😰</span>Anxious
+            </div>
+            <div class="emotion-btn" onclick="selectEmotion(this,'😤 Frustrated')">
+              <span class="e-emoji">😤</span>Frustrated
+            </div>
+            <div class="emotion-btn" onclick="selectEmotion(this,'😴 Tired')">
+              <span class="e-emoji">😴</span>Tired
+            </div>
+          </div>
+          <input type="hidden" id="f-emotion" value="">
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">✅ Rule Check</div>
+          <div class="rule-checks">
+            <div class="rule-check">
+              <input type="checkbox" id="r-plan">
+              <label for="r-plan">I followed my trading plan</label>
+            </div>
+            <div class="rule-check">
+              <input type="checkbox" id="r-stop">
+              <label for="r-stop">I had a stop loss defined</label>
+            </div>
+            <div class="rule-check">
+              <input type="checkbox" id="r-target">
+              <label for="r-target">I had a profit target defined</label>
+            </div>
+            <div class="rule-check">
+              <input type="checkbox" id="r-revenge">
+              <label for="r-revenge">⚠️ This was a revenge trade</label>
+            </div>
+            <div class="rule-check">
+              <input type="checkbox" id="r-chase">
+              <label for="r-chase">⚠️ I chased this trade</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">💡 Lessons Learned</div>
+          <div class="form-group">
+            <label class="form-label">What did this trade teach you?</label>
+            <textarea class="form-textarea" id="f-lesson" placeholder="What went well? What would you do differently next time?"></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">⭐ Rate This Trade</div>
+          <div class="star-rating" id="star-rating">
+            <button type="button" class="star-btn" onclick="setRating(1)">⭐</button>
+            <button type="button" class="star-btn" onclick="setRating(2)">⭐</button>
+            <button type="button" class="star-btn" onclick="setRating(3)">⭐</button>
+            <button type="button" class="star-btn" onclick="setRating(4)">⭐</button>
+            <button type="button" class="star-btn" onclick="setRating(5)">⭐</button>
+          </div>
+          <input type="hidden" id="f-rating" value="0">
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <textarea class="form-textarea" id="f-notes" placeholder="Any additional notes about this trade..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">💕 Save Trade</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     JOURNAL SCREEN
+══════════════════════════════════════ -->
+<div id="screen-journal" class="screen">
+  <div class="app-header">
+    <div class="brand">Trader <span>Barbie</span> 💕</div>
+    <div class="screen-title">Trade Journal</div>
+  </div>
+
+  <div class="content">
+    <div class="filter-row">
+      <div class="filter-chip active" onclick="filterTrades('all', this)">All Trades</div>
+      <div class="filter-chip" onclick="filterTrades('win', this)">✅ Wins</div>
+      <div class="filter-chip" onclick="filterTrades('loss', this)">❌ Losses</div>
+      <div class="filter-chip" onclick="filterTrades('options', this)">Options</div>
+      <div class="filter-chip" onclick="filterTrades('futures', this)">Futures</div>
+    </div>
+    <div id="journal-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     STATS SCREEN
+══════════════════════════════════════ -->
+<div id="screen-stats" class="screen">
+  <div class="app-header">
+    <div class="brand">Trader <span>Barbie</span> 💕</div>
+    <div class="screen-title">My Performance</div>
+  </div>
+
+  <div class="content">
+    <div class="stats-big">
+      <div class="stat-big-box">
+        <span class="sb-val" id="s-total" style="color:var(--hot-pink)">0</span>
+        <span class="sb-label">Total Trades</span>
+      </div>
+      <div class="stat-big-box">
+        <span class="sb-val" id="s-winrate" style="color:var(--green)">0%</span>
+        <span class="sb-label">Win Rate</span>
+      </div>
+      <div class="stat-big-box">
+        <span class="sb-val" id="s-pnl" style="color:var(--gold)">$0</span>
+        <span class="sb-label">Total P&L</span>
+      </div>
+      <div class="stat-big-box">
+        <span class="sb-val" id="s-avg" style="color:var(--barbie-pink)">$0</span>
+        <span class="sb-label">Avg Per Trade</span>
+      </div>
+    </div>
+
+    <div class="win-rate-bar">
+      <h4>Win / Loss Breakdown</h4>
+      <div class="bar-track">
+        <div class="bar-fill" id="win-bar" style="width:0%"></div>
+      </div>
+      <div class="bar-labels">
+        <span id="win-label">0 Wins</span>
+        <span id="loss-label">0 Losses</span>
+      </div>
+    </div>
+
+    <div class="section-header" style="margin-bottom:12px;">
+      <h3>P&L by Day</h3>
+    </div>
+    <div class="pnl-day-list" id="pnl-by-day"></div>
+
+    <div style="margin-top:20px; padding:16px; background:var(--card); border:1px solid var(--border); border-radius:18px; text-align:center;">
+      <div style="font-size:11px; color:var(--barbie-pink); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">Most Traded</div>
+      <div id="most-traded" style="font-family:'Playfair Display',serif; font-size:22px; color:#fff;">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WEEKLY REVIEW SCREEN
+══════════════════════════════════════ -->
+<div id="screen-review" class="screen">
+  <div class="app-header">
+    <div class="brand">Trader <span>Barbie</span> 💕</div>
+    <div class="screen-title">Weekly Review</div>
+  </div>
+
+  <div class="content">
+    <div class="review-card">
+      <h3>📅 Week of <span id="review-week-date"></span></h3>
+
+      <div class="stats-row" style="margin-bottom:16px;">
+        <div class="stat-box">
+          <span class="s-val pink" id="rw-trades">0</span>
+          <span class="s-label">Trades</span>
+        </div>
+        <div class="stat-box">
+          <span class="s-val green" id="rw-wr">0%</span>
+          <span class="s-label">Win Rate</span>
+        </div>
+        <div class="stat-box">
+          <span class="s-val gold" id="rw-pnl">$0</span>
+          <span class="s-label">P&L</span>
+        </div>
+      </div>
+    </div>
+
+    <form id="review-form" onsubmit="saveReview(event)">
+      <div class="review-card">
+        <h3>🏆 What Worked</h3>
+        <textarea class="form-textarea" id="rv-worked" placeholder="What setups or strategies worked best this week?"></textarea>
+      </div>
+
+      <div class="review-card">
+        <h3>🔧 What Didn't Work</h3>
+        <textarea class="form-textarea" id="rv-didnt" placeholder="What mistakes did you make? What rules did you break?"></textarea>
+      </div>
+
+      <div class="review-card">
+        <h3>😤 Psychological Check</h3>
+        <div class="form-group">
+          <label class="form-label">Overall Discipline This Week</label>
+          <select class="form-select" id="rv-discipline">
+            <option>⭐ Needs Work</option>
+            <option>⭐⭐ Getting There</option>
+            <option>⭐⭐⭐ Good</option>
+            <option>⭐⭐⭐⭐ Great</option>
+            <option>⭐⭐⭐⭐⭐ Excellent</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-top:10px;">
+          <label class="form-label">Biggest Emotional Challenge</label>
+          <textarea class="form-textarea" id="rv-emotion" placeholder="What tested you emotionally this week?"></textarea>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <h3>🎯 Focus for Next Week</h3>
+        <textarea class="form-textarea" id="rv-focus" placeholder="What are your top 3 goals for next week?"></textarea>
+      </div>
+
+      <div class="review-card">
+        <h3>💕 Affirmation</h3>
+        <textarea class="form-textarea" id="rv-affirm" placeholder="Write something kind and encouraging to yourself..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">💕 Save Weekly Review</button>
+    </form>
+  </div>
+</div>
+
+<!-- TRADE DETAIL MODAL -->
+<div class="modal-overlay" id="trade-modal" onclick="closeModal(event)">
+  <div class="modal-sheet" id="modal-content">
+    <div class="modal-handle"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer-bar">
+  📚 For educational purposes only • Not financial advice • Clarity 2 Capital 💕
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="goTo('home')">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-btn" id="nav-log" onclick="goTo('log')">
+    <span class="nav-icon">➕</span>Log
+  </button>
+  <button class="nav-btn" id="nav-journal" onclick="goTo('journal')">
+    <span class="nav-icon">📓</span>Journal
+  </button>
+  <button class="nav-btn" id="nav-stats" onclick="goTo('stats')">
+    <span class="nav-icon">📊</span>Stats
+  </button>
+  <button class="nav-btn" id="nav-review" onclick="goTo('review')">
+    <span class="nav-icon">📅</span>Review
+  </button>
+</nav>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+let trades = JSON.parse(localStorage.getItem('tb_trades') || '[]');
+let reviews = JSON.parse(localStorage.getItem('tb_reviews') || '[]');
+let currentMode = 'quick';
+let currentRating = 0;
+let selectedEmotion = '';
+let currentFilter = 'all';
+
+function saveTrades() { localStorage.setItem('tb_trades', JSON.stringify(trades)); }
+function saveReviews() { localStorage.setItem('tb_reviews', JSON.stringify(reviews)); }
+
+// ── NAVIGATION ────────────────────────────────────────
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  document.getElementById('nav-' + screen).classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (screen === 'home') renderHome();
+  if (screen === 'journal') renderJournal();
+  if (screen === 'stats') renderStats();
+  if (screen === 'review') renderReview();
+}
+
+// ── MODE TOGGLE ───────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-quick').classList.toggle('active', mode === 'quick');
+  document.getElementById('mode-detail').classList.toggle('active', mode === 'detail');
+  document.getElementById('detail-fields').style.display = mode === 'detail' ? 'block' : 'none';
+}
+
+// ── EMOTION SELECTOR ──────────────────────────────────
+function selectEmotion(el, val) {
+  document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEmotion = val;
+  document.getElementById('f-emotion').value = val;
+}
+
+// ── STAR RATING ───────────────────────────────────────
+function setRating(n) {
+  currentRating = n;
+  document.getElementById('f-rating').value = n;
+  document.querySelectorAll('.star-btn').forEach((btn, i) => {
+    btn.classList.toggle('lit', i < n);
+  });
+}
+
+// ── SAVE TRADE ────────────────────────────────────────
+function saveTrade(e) {
+  e.preventDefault();
+  const trade = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
+    dateRaw: new Date().toISOString(),
+    dayOfWeek: new Date().toLocaleDateString('en-US', { weekday:'long' }),
+    symbol: document.getElementById('f-symbol').value.toUpperCase(),
+    market: document.getElementById('f-market').value,
+    direction: document.getElementById('f-direction').value,
+    contracts: document.getElementById('f-contracts').value || '1',
+    entry: parseFloat(document.getElementById('f-entry').value),
+    exit: parseFloat(document.getElementById('f-exit').value),
+    result: document.getElementById('f-result').value,
+    pnl: parseFloat(document.getElementById('f-pnl').value),
+    notes: document.getElementById('f-notes').value,
+    mode: currentMode,
+  };
+
+  if (currentMode === 'detail') {
+    trade.strike = document.getElementById('f-strike').value;
+    trade.expiry = document.getElementById('f-expiry').value;
+    trade.setup = document.getElementById('f-setup').value;
+    trade.condition = document.getElementById('f-condition').value;
+    trade.why = document.getElementById('f-why').value;
+    trade.emotion = selectedEmotion;
+    trade.followedPlan = document.getElementById('r-plan').checked;
+    trade.hadStop = document.getElementById('r-stop').checked;
+    trade.hadTarget = document.getElementById('r-target').checked;
+    trade.revenge = document.getElementById('r-revenge').checked;
+    trade.chased = document.getElementById('r-chase').checked;
+    trade.lesson = document.getElementById('f-lesson').value;
+    trade.rating = currentRating;
+  }
+
+  trades.unshift(trade);
+  saveTrades();
+
+  // Reset form
+  document.getElementById('trade-form').reset();
+  document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('lit'));
+  currentRating = 0; selectedEmotion = '';
+  setMode('quick');
+
+  showToast('Trade saved! 💕');
+  goTo('home');
+}
+
+// ── SAVE REVIEW ───────────────────────────────────────
+function saveReview(e) {
+  e.preventDefault();
+  const review = {
+    id: Date.now(),
+    week: document.getElementById('review-week-date').textContent,
+    worked: document.getElementById('rv-worked').value,
+    didnt: document.getElementById('rv-didnt').value,
+    discipline: document.getElementById('rv-discipline').value,
+    emotion: document.getElementById('rv-emotion').value,
+    focus: document.getElementById('rv-focus').value,
+    affirm: document.getElementById('rv-affirm').value,
+  };
+  reviews.unshift(review);
+  saveReviews();
+  document.getElementById('review-form').reset();
+  showToast('Weekly review saved! 💕');
+}
+
+// ── RENDER HOME ───────────────────────────────────────
+function renderHome() {
+  const now = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('home-date').textContent =
+    days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+
+  const wins = trades.filter(t => t.result.includes('Win')).length;
+  const wr = trades.length ? Math.round((wins / trades.length) * 100) : 0;
+  const totalPnl = trades.reduce((s, t) => s + (t.pnl || 0), 0);
+
+  document.getElementById('stat-trades').textContent = trades.length;
+  document.getElementById('stat-winrate').textContent = wr + '%';
+  document.getElementById('stat-winrate').className = 's-val ' + (wr >= 50 ? 'green' : 'red');
+  document.getElementById('stat-pnl').textContent = (totalPnl >= 0 ? '+$' : '-$') + Math.abs(totalPnl).toFixed(0);
+  document.getElementById('stat-pnl').className = 's-val ' + (totalPnl >= 0 ? 'green' : 'red');
+
+  // Recent trades
+  const el = document.getElementById('recent-trades-list');
+  if (!trades.length) {
+    el.innerHTML = `<div class="empty-state"><span class="e-icon">📈</span><p>No trades yet.<br>Log your first trade to get started! 💕</p></div>`;
+    return;
+  }
+  el.innerHTML = trades.slice(0, 5).map(t => tradeCardHTML(t)).join('');
+}
+
+// ── RENDER JOURNAL ────────────────────────────────────
+function renderJournal() {
+  const el = document.getElementById('journal-list');
+  let filtered = trades;
+  if (currentFilter === 'win') filtered = trades.filter(t => t.result.includes('Win'));
+  if (currentFilter === 'loss') filtered = trades.filter(t => t.result.includes('Loss'));
+  if (currentFilter === 'options') filtered = trades.filter(t => t.market === 'Options');
+  if (currentFilter === 'futures') filtered = trades.filter(t => t.market === 'Futures');
+
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-state"><span class="e-icon">📓</span><p>No trades found 💕</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(t => tradeCardHTML(t)).join('');
+}
+
+function filterTrades(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderJournal();
+}
+
+// ── TRADE CARD HTML ───────────────────────────────────
+function tradeCardHTML(t) {
+  const pnlClass = t.pnl >= 0 ? 'win' : 'loss';
+  const pnlStr = (t.pnl >= 0 ? '+$' : '-$') + Math.abs(t.pnl).toFixed(2);
+  return `
+    <div class="trade-card" onclick="openTrade(${t.id})">
+      <div class="trade-left">
+        <div class="trade-symbol">${t.symbol}</div>
+        <div class="trade-meta">${t.date} • ${t.market} • ${t.direction.includes('Call') || t.direction.includes('Long') ? '🟢' : '🔴'}</div>
+      </div>
+      <div class="trade-right">
+        <div class="trade-pnl ${pnlClass}">${pnlStr}</div>
+        <div class="trade-result" style="color:${t.result.includes('Win') ? 'var(--green)' : t.result.includes('Loss') ? 'var(--red)' : 'var(--gold)'}">${t.result}</div>
+      </div>
+    </div>`;
+}
+
+// ── OPEN TRADE DETAIL ─────────────────────────────────
+function openTrade(id) {
+  const t = trades.find(t => t.id === id);
+  if (!t) return;
+  const pnlStr = (t.pnl >= 0 ? '+$' : '-$') + Math.abs(t.pnl).toFixed(2);
+  const pnlColor = t.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-title">${t.symbol}</div>
+    <div class="modal-sub">${t.date} • ${t.market}</div>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="d-label">Direction</div><div class="d-val">${t.direction}</div></div>
+      <div class="detail-item"><div class="d-label">Contracts</div><div class="d-val">${t.contracts || '—'}</div></div>
+      <div class="detail-item"><div class="d-label">Entry</div><div class="d-val">$${t.entry}</div></div>
+      <div class="detail-item"><div class="d-label">Exit</div><div class="d-val">$${t.exit}</div></div>
+      <div class="detail-item"><div class="d-label">P&L</div><div class="d-val" style="color:${pnlColor};font-weight:700;">${pnlStr}</div></div>
+      <div class="detail-item"><div class="d-label">Result</div><div class="d-val">${t.result}</div></div>
+      ${t.setup ? `<div class="detail-item"><div class="d-label">Setup</div><div class="d-val">${t.setup}</div></div>` : ''}
+      ${t.emotion ? `<div class="detail-item"><div class="d-label">Emotion</div><div class="d-val">${t.emotion}</div></div>` : ''}
+    </div>
+    ${t.why ? `<div class="detail-notes"><h4>Why I Took This Trade</h4>${t.why}</div>` : ''}
+    ${t.lesson ? `<div class="detail-notes"><h4>💡 Lesson Learned</h4>${t.lesson}</div>` : ''}
+    ${t.notes ? `<div class="detail-notes"><h4>Notes</h4>${t.notes}</div>` : ''}
+    ${t.followedPlan !== undefined ? `
+    <div class="detail-notes">
+      <h4>Rule Check</h4>
+      ${t.followedPlan ? '✅' : '❌'} Followed my plan<br>
+      ${t.hadStop ? '✅' : '❌'} Had a stop loss<br>
+      ${t.hadTarget ? '✅' : '❌'} Had a profit target<br>
+      ${t.revenge ? '⚠️ Revenge trade' : ''} ${t.chased ? '⚠️ Chased this trade' : ''}
+    </div>` : ''}
+    ${t.rating ? `<div class="detail-notes"><h4>Rating</h4>${'⭐'.repeat(t.rating)}</div>` : ''}
+    <button class="delete-btn" onclick="deleteTrade(${t.id})">🗑️ Delete Trade</button>
+  `;
+
+  document.getElementById('trade-modal').classList.add('open');
+}
+
+function deleteTrade(id) {
+  if (!confirm('Delete this trade?')) return;
+  trades = trades.filter(t => t.id !== id);
+  saveTrades();
+  closeModal();
+  renderJournal();
+  renderHome();
+  showToast('Trade deleted');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('trade-modal')) {
+    document.getElementById('trade-modal').classList.remove('open');
+  }
+}
+
+// ── RENDER STATS ──────────────────────────────────────
+function renderStats() {
+  const wins = trades.filter(t => t.result.includes('Win')).length;
+  const losses = trades.filter(t => t.result.includes('Loss')).length;
+  const wr = trades.length ? Math.round((wins / trades.length) * 100) : 0;
+  const totalPnl = trades.reduce((s, t) => s + (t.pnl || 0), 0);
+  const avgPnl = trades.length ? totalPnl / trades.length : 0;
+
+  document.getElementById('s-total').textContent = trades.length;
+  document.getElementById('s-winrate').textContent = wr + '%';
+  document.getElementById('s-pnl').textContent = (totalPnl >= 0 ? '+$' : '-$') + Math.abs(totalPnl).toFixed(0);
+  document.getElementById('s-avg').textContent = (avgPnl >= 0 ? '+$' : '-$') + Math.abs(avgPnl).toFixed(0);
+  document.getElementById('win-bar').style.width = wr + '%';
+  document.getElementById('win-label').textContent = wins + ' Wins';
+  document.getElementById('loss-label').textContent = losses + ' Losses';
+
+  // P&L by day
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const dayPnl = {};
+  days.forEach(d => dayPnl[d] = 0);
+  trades.forEach(t => { if (dayPnl[t.dayOfWeek] !== undefined) dayPnl[t.dayOfWeek] += (t.pnl || 0); });
+
+  document.getElementById('pnl-by-day').innerHTML = days.map(d => {
+    const v = dayPnl[d];
+    const c = v >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<div class="pnl-day-item">
+      <span class="pnl-day-name">${d}</span>
+      <span class="pnl-day-amount" style="color:${c}">${v >= 0 ? '+$' : '-$'}${Math.abs(v).toFixed(0)}</span>
+    </div>`;
+  }).join('');
+
+  // Most traded
+  const symbolCounts = {};
+  trades.forEach(t => symbolCounts[t.symbol] = (symbolCounts[t.symbol] || 0) + 1);
+  const most = Object.entries(symbolCounts).sort((a,b) => b[1]-a[1])[0];
+  document.getElementById('most-traded').textContent = most ? `${most[0]} (${most[1]} trades)` : '—';
+}
+
+// ── RENDER REVIEW ─────────────────────────────────────
+function renderReview() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(now.setDate(diff));
+  document.getElementById('review-week-date').textContent =
+    mon.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + ' – ' +
+    new Date(mon.getTime() + 4*86400000).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+
+  // Week's trades
+  const weekStart = mon.toDateString();
+  const weekTrades = trades.filter(t => {
+    const d = new Date(t.dateRaw);
+    return d >= mon && d <= new Date(mon.getTime() + 7*86400000);
+  });
+  const wWins = weekTrades.filter(t => t.result.includes('Win')).length;
+  const wPnl = weekTrades.reduce((s, t) => s + (t.pnl || 0), 0);
+  const wWr = weekTrades.length ? Math.round((wWins / weekTrades.length) * 100) : 0;
+
+  document.getElementById('rw-trades').textContent = weekTrades.length;
+  document.getElementById('rw-wr').textContent = wWr + '%';
+  document.getElementById('rw-pnl').textContent = (wPnl >= 0 ? '+$' : '-$') + Math.abs(wPnl).toFixed(0);
+}
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──────────────────────────────────────────────
+renderHome();
+</script>
+</body>
+</html>
